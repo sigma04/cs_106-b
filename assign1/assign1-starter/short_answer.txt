@@ -1,0 +1,75 @@
+Perfect Numbers
+---------------
+
+Before submitting this file, make sure that there are no more TODO
+placeholders remaining in the file (and remove this comment too).
+
+Q1. Roughly how long did it take your computer to do the search? How many perfect numbers were found and what were they?
+A1. 通过``<time.h>``库中的``time()``函数进行计时，得到程序的执行时间为10.0195秒，1 到 40000 内共有 4 个完全数，分别是 6，28，496，8128。
+
+Q2. Record the timing results for `findPerfects` that you observed into a table.
+A2. 执行时间如下表所示：
+
+|搜索范围 |执行时间(s)|
+|---------|----------|
+|10000|0.645|
+|20000|2.479|
+|40000|9.949|
+|50000|15.431|
+|60000|22.006|
+|80000|39.119|
+|110000|73.753|
+
+Q3. Does it take the same amount of work to compute `isPerfect` on the number 10 as it does on the number 1000? Why or why not? Does it take the same amount of work for `findPerfects` to search the range of numbers from 1-1000 as it does to search the numbers from 1000-2000? Why or why not?
+A3. 对于 10 与 1000，计算 ``isPerfect``做的工作不是同样多的。如果n=10，则``isPerfect``中调用的``divisorSum(n)``中的for循环仅仅循环1次，如果n=1000，则``isPerfect``中调用的``divisorSum(n)``中的for循环会循环1000，n=1000的工作量更大。对于搜索范围为 1-1000 的数，``findPerfect``调用的``divisorSum``中的for循环共循环$\frac{(1+1000)*1000}{2}=500500$次，搜索范围为1000-2000的数，``findPerfect``调用的``divisorSum``中的for循环共循环$\frac{(1000+2000)*10010}{2}=1501500$次，搜索范围为1000-2000的数时，``findPerfect``的工作量更大。
+
+Q4. Extrapolate from the data you gathered and make a prediction: how long will it take `findPerfects` to reach the fifth perfect number?
+A4. 由于花费时间与完全数的平方成正比，第5个完全数是33550336，结合之前程序搜索110000以内的完全数需要73.753秒，所以``findPerfect``找出第5个完全数要花费的时间为
+$\frac{33550336^2}{110000^2}*73.753=6.861*10^6 秒 = 79.410 天$。
+
+Q5. Do any of the tests still pass even with this broken function? Why or why not?
+A5. 这个函数测试失败时，部分测试能通过，部分测试不能通过。原先完全数成立的测试不能通过，而原先完全数不成立的测试依旧能通过测试。
+
+Q6. Describe the testing strategy you used for your test cases to confirm `smarterSum` is working correctly.
+A6. 测试策略: 首先对``divisorSum()``的已有的案例进行测试，之后针对``smarterSum()``添加新的特殊的案例，例如输入的n是某个数的平方。
+
+Q7. Record your timing results for `findPerfectsSmarter` into a table.
+A7. 执行时间如下表所示：
+
+|搜索范围|执行时间(s)|
+|--------|----------|
+|375000|3.114|
+|750000|8.599|
+|1500000|24.080|
+|3000000|67.649|
+
+Q8. Make a prediction: how long will `findPerfectsSmarter` take to reach the fifth perfect number?
+A8. 由于花费时间与$n\sqrt{n}$成正比关系，第5个完全数是33550336，结合之前程序搜索3000000以内的完全数需要67.649秒，所以ffindPerfectsSmarter找出第5个完全数要花费的时间为
+$\frac{33550336*\sqrt{33550336}}{3000000*\sqrt{3000000}}*67.649=2156.032 秒= 35.934 分$。
+
+Q9. Explain how you chose your specific test cases and why they lead you to be confident `findNthPerfectEuclid` is working correctly.
+A9. 通过``EXPEXT_EQUAL``测试方法判断``findNthPerfectEuclid()``返回的前5个完全数是否等于已有完全数表中对应的数值。
+
+Soundex
+-------
+
+Q10. What is the Soundex code for "Angelou"? What is the code for your own surname?
+A10. "Angelou" 的编码是A524，编码计算过程如下:
+Angelou -> 0520400 -> 052040 -> A52040 -> A524
+
+Q11. Before writing any code, brainstorm your plan of attack and sketch how you might decompose the work into smaller tasks. Briefly describe your decomposition strategy.
+A11. 分解为如下过程：
+1. 去除非字母字符;
+2. 进行编码;
+3. 去除相邻重复数字;
+4. 用首字母替换第一个数字;
+5. 删除0;
+6. 将编码格式化为4个字符。
+
+Q12. Think about one or more examples of a class of names that the Soundex system might not work well for. Explain what this class of names is and why the system might incorrectly group them or mis-categorize one of the names.
+A12. 6Curie是一个失败的案例，应为函数直接将第0个字符压入result中，并没有进行处理。
+
+Q13. Suppose you are a software engineer working for the U.S. government. You have been tasked with implementing a system that collects names as part of the Census survey and analyzes these names using a phonetic algorithm. Your boss suggests using Soundex and notes that the algorithm is only expected to work for ASCII-encoded strings, since supporting Unicode would require extra work and time. What would your response be and why? What representational harms might result from building a system that exclusively uses Soundex and/or ASCII?
+A13. 由于发音方式的存在差异，所以soundex算法不一定能够适用。即使发音相同，也不代表是相同的姓名，用于人口普查的情况下可能会导致相同发音的姓名的人的统计量不切实际。
+
+
