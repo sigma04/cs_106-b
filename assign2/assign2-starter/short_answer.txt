@@ -1,0 +1,50 @@
+Before submitting this file, make sure that there are no more TODO
+placeholders remaining in the file (and remove this comment too).
+
+Warmup
+------
+Q1. The display of the Stack in the debugger uses the labels `top` and `bottom` to mark the two ends of the stack. How are the contents labeled when the Stack contains only one element?
+A1. 当 Stack 仅包含一个元素时，这两个标签将显示为“bottom/top”
+
+Q2. For which type of inputs does the function go into an infinite loop?
+A2. 这种情况是由于duplicateNegatives函数中for循环的判断语句不当造成的，因为程序执行过程中如果队列顶部的元素是负数的情况下队列会增大，导致for循环不能及时停止，且当duplicateNegatives函数的输入队列q中的所有元素都是负数的情况下是无限循环，只要队列q中含有正的元素，程序的终究会停止，并不是正真的无限循环，所以程序是否会陷入无限循环和队列中负值的位置的关系不大（当q中元素个数很小的情况下会受到位置的影响）。duplicateNegatives中的for循环下标i每循环1次都会递增1,每次循环中如果q顶部的元素是负数的情况下，q.size()才会递增1,q顶部的元素是正数的情况下，q.size()保持不变。这样每当q顶部的元素是正数的情况下，循环下标i与q.size()的差距就会减小1,最终程序总会停止，并不是真的无限循环，只不过循环的时间长短和q中的负数元素与正数元素的个数相关，而且由于q顶部的元素是负数的情况下，q中负数元素的个数都会增加1个，导致q中负数的个数会逐渐翻倍，导致q顶部遇到的正元素所经过的时间会翻倍，循环下标i与q.size()的差距就会减小1所消耗的时间就会曾长。
+
+Q3. Show your edited code for duplicateNegatives that fixes the problem with the infinite loop
+A3. 因为程序执行过程中如果队列顶部的元素是负数的情况下队列会增大，所以专门用一个变量存储队列q最初所含元素的个数即可避免bug。
+
+Q4. What is the better fix to `sumStack` that corrects the bug?
+A4. sumStack函数在while循环中已经对s是否为空进行了判断，所以没必要在函数最初对栈进行弹出操作，为不影响计算结果，直接将变量total初始化为0即可。
+
+Maze
+-------
+Q5. In lecture, Cynthia noted the convention is to pass large data structures by reference for reasons of efficiency. Why then do you think `validatePath` passes `path` by value instead of by reference?
+A5. 因为validatePath函数中需要对path进行遍历来判断路径中是符合移动规则，而path是个栈，除了pop没有其他方法可以对其进行遍历，而pop方法会修改path中的内容，如果使用引用方式传递参数的话会使得原始变量被修改，从而对后续的代码产生影响。
+
+Q6. After you have written your tests, describe your testing strategy to determine that your `validatePath` works as intended.
+A6. TODO
+
+Search Engine
+-------------
+Q7. Sketch the contents of the inverted index built from the `res/tiny.txt` database file.
+A7. {"5lb_m&ms":{"www.shoppinglist.com"}, 
+	"blue":{"www.dr.seuss.net", "www.rainbow.org"}, 
+	"bread":{"www.shoppinglist.com"}, 
+	"eat":{"www.bigbadwolf.com"}, 
+	"fish":{"www.bigbadwolf.com", "www.dr.seuss.net", "www.shoppinglist.com"}, 
+	"green":{"www.rainbow.org"}, 
+	"i":{"www.bigbadwolf.com"}, 
+	"milk":{"www.shoppinglist.com"}, 
+	"one":{"www.dr.seuss.net"}, 
+	"red":{"www.dr.seuss.net", "www.rainbow.org"}, 
+	"two":{"www.dr.seuss.net"}}
+
+Beyond Algorithmic Analysis
+---------------------------
+Q8. In a short paragraph, describe a real or plausible scenario not previously presented in lecture in which using techniques like Big-O or Asymptotic Analysis to improve the performance of an algorithm might benefit the environment. Include your thoughts on how a software engineer working on this piece of code might identify such potential benefits and take them into consideration when designing the code.
+A8. TODO
+
+Q9. According to the contract that IBM struck with the state of Indiana, the criteria for optimization were improving efficiency of the overall welfare system and reducing fraud. Criteria for reducing wait times and wrongful denials were not included.  However, wrongfully denying benefits has a huge negative  impact on the citizens who rely on the system.  If criteria like minimizing wrongful denials were not included in the contract, should engineers have included them in their optimization algorithm?  Why or why not?
+A9. TODO
+
+Q10. Imagine that after completing CS106B you are hired at IBM as an engineer working on this system. How might you have approached designing and setting the goals of this system?  How might you apply algorithmic analysis tools to build a system that achieved  the desired goals? Could you do so in a way that avoids the severe negative impacts on users of the system that are outlined in the case study?
+A10. TODO
