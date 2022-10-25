@@ -1,0 +1,28 @@
+Before submitting this file, make sure that there are no more TODO
+placeholders remaining in the file (and remove this comment too).
+
+Backtracking Warmup
+------
+Q16. What is the value of totalMoves after stepping over the call to moveTower in hanoiAnimation?
+A16. 在 hanoiAnimation 中越过 moveTower 调用之后，totalMoves 的值是15。
+
+Q17. What is the value of the totalMoves variable after stepping over the first recursive sub-call? (In other words, within moveTower just after stepping over the first recursive sub-call to moveTower inside the else statement.)
+A17. 在 Step Over 第一个递归子调用之后，totalMoves 变量的值是7。
+
+Q18. After breaking at the base case of moveTower and then choosing Step Out, where do you end up? (What function are you in, and at what line number?) What is the value of the totalMoves variable at this point?
+A18. 在 moveTower 的 Base Case 满足时选择 Step Out，你最终会在函数 moveTower 中，行号是67，此时，totalMoves 变量的值是1。
+
+Q19. What is the smallest possible input that you used to trigger the bug in the program?
+A19. 我用来触发程序错误的最小可能输入是仅包含1个元素的Vector<int>变量{3}。
+
+Q20. Identify the one-character error in the code and explain why that one-character bug causes the function to return the output you see when running on the minimal input you listed above. You should be able to specifically account for how the error causes the result to change from “completely correct” to “terribly wrong.”
+A20. include递归分支中使用的 += 赋值运算符修改了sumSoFar的数值，exclude递归分支运行过程中使用了被修改的sumSoFar变量，导致运行结果不符合预期值。
+
+
+Voting (Please note that this part of A3 is completely optional and will only be considered for extra credit. If you did not submit code for this part of the assignment, Q19 and Q20 will not be considered.)
+------
+Q21. What is the Big O of computePowerIndex? Include your timing data and explain how it supports your reasoning.
+Q19: btr和dfs版本的computerPowerIndex的复杂度都是O(n*2^n)，computerPowerIndex依次对Vector中的每个元素调用递归函数，循环的复杂度为O(n)，而递归函数的调用都用引用降低复杂度为O(1),且递归调用次数都是2^n，所以computerPowerIndex的复杂度是O(n*2^n)
+
+Q22. Use the Big O and timing data to estimate how long it would take to compute the power index for the 51 voting blocks in the U.S. Electoral College.
+A22. 本地运行27个选票的关键选票的时间为23s，由于计算时间与n*2^n成正比，所以含有51个选票的关键选票计算时间为(51*2^51)*23s/(27*2^27)，约等于2^29s

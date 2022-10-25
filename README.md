@@ -11,6 +11,7 @@
 	* 3.2. [第二部分 姓氏编码检索程序](#-2)
 * 4. [assign2](#assign2)
 * 5. [assign3.1](#assign3.1)
+* 6. [assign3.2](#assign3.2)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -272,3 +273,49 @@ base是负数对应的case是多余的，与最后的case重复，且处理过�
 ***12. merge测试截图***
 
 ![assign3.1-merge](./assign3.1/assign3.1-merge.png)
+
+##  6. <a name='assign3.2'></a>assign3.2
+
+### 第一部分 递归回溯热身
+
+***1. Q16***
+
+在 hanoiAnimation 中越过 moveTower 调用之后，totalMoves 的值是15，运行截图如下。
+
+![assign3.2-Q16](./assign3.2/assign3.2-Q16.png)
+
+***2. Q17***
+
+在 Step Over 第一个递归子调用之后，totalMoves 变量的值是7，运行截图如下。
+
+![assign3.2-Q17](./assign3.2/assign3.2-Q17.png)
+
+***3.Q18***
+
+在 moveTower 的 Base Case 满足时选择 Step Out，你最终会在函数 moveTower 中，行号是67，此时，totalMoves 变量的值是1，运行截图如下。
+
+![assign3.2-Q18](./assign3.2/assign3.2-Q18.png)
+
+***4. Q19***
+
+我用来触发程序错误的最小可能输入是仅包含1个元素的Vector<int>变量{3}。
+
+***5. Q20***
+
+include递归分支中使用的 += 赋值运算符修改了sumSoFar的数值，exclude递归分支运行过程中使用了被修改的sumSoFar变量，导致运行结果不符合预期值。
+
+***6. boggle测试截图***
+
+![assign3.2-boggle](./assign3.2/assign3.2-boggle.png)
+
+***7. Q21***
+
+btr和dfs版本的computerPowerIndex的复杂度都是O(n\*2^n)，computerPowerIndex依次对Vector中的每个元素调用递归函数，循环的复杂度为O(n)，而递归函数的调用都用引用降低复杂度为O(1),且递归调用次数都是2^n，所以computerPowerIndex的复杂度是O(n\*2^n)
+
+***8. Q22***
+
+本地运行27个选票的关键选票的时间为23s，由于计算时间与n\*2^n成正比，所以含有51个选票的关键选票计算时间为(51\*2^51) \* 23s / (27\*2^27)，约等于2^29s
+
+***9. voting测试截图***
+
+![assign3.2-voting](./assign3.2/assign3.1-voting.png)
