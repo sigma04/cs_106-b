@@ -12,6 +12,7 @@
 * 4. [assign2](#assign2)
 * 5. [assign3.1](#assign3.1)
 * 6. [assign3.2](#assign3.2)
+* 7. [assign4](#assign4)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -323,3 +324,152 @@ btr和dfs版本的``computerPowerIndex``的复杂度都是O(n\*2^n)，``computer
 ***9. voting测试截图***
 
 ![assign3.2-voting](./assign3.2/assign3.1-voting.png)
+
+##  2. <a name='assign4'></a>assign4
+
+### 第一部分 热身
+
+***1. Q1***
+
+``allBalls[0]`` 成员变量的值如何在迭代中的变化如下，``_id``、``_vx``、``_vy``保持不变、``_x``在之前数值的基础上变化``_vx`` ，``_y`` 之前数值的基础上变化``_vy``。
+
+***2. Q2***
+
+在随机数种子设定为2000的条件下，``_id``为2的小球卡在窗口的右侧，循环过程中``_id``保持不变，``_vx``在1和-1之间来回切换，``_vy``保持不变、``_x``在之前数值的基础上变化``_vx``，``_y`` 之前数值的基础上变化``_vy``。
+
+***3. Q3***
+
+强制把卡住的球放置到 (0, 0) 位置会恢复正常。
+
+***4. Q4***
+
+在你的系统上，这些内存错误的观察结果如下：
+
+- 访问分配的数组边界之外的索引 
+
+有时能正常运行，有时会报以下错误
+```
+[SimpleTest] starting (PROVIDED_TEST, line  44) Test case that access indexes ... 
+*** STANFORD C++ LIBRARY
+*** The PQueue program has terminated unexpectedly (crashed)
+*** A segmentation fault (SIGSEGV) occurred during program execution
+
+    This error indicates your program attempted to dereference a pointer
+    to an invalid memory address (possibly out of bounds, deallocated, nullptr, ...)
+
+*** To get more information about a program crash,
+*** run your program again under the debugger.
+
+FATAL: exception not rethrown
+```
+
+- 两次删除相同的内存
+
+```
+[SimpleTest] starting (PROVIDED_TEST, line  60) Test case that deletes same me... 
+*** STANFORD C++ LIBRARY
+*** The PQueue program has terminated unexpectedly (crashed)
+*** A segmentation fault (SIGSEGV) occurred during program execution
+
+    This error indicates your program attempted to dereference a pointer
+    to an invalid memory address (possibly out of bounds, deallocated, nullptr, ...)
+
+*** To get more information about a program crash,
+*** run your program again under the debugger.
+
+FATAL: exception not rethrown
+```
+
+- 删除后访问内存
+
+``EXPECT_EQUAL``测试没有通过，内存释放后``taskList[0].label``中的变量不再是字符串``"sleep"``，调试过程中变量区截图如下。
+
+![assign4-Q4-3](./assign4/assign4-Q4-3.png)
+
+### 第二部分 基于数组的优先级队列
+
+***5. Q5***
+
+接口中的注释描述了功能及算法复杂度，而实现中的注释加入了更多实现细节的描述。
+
+***6. Q6***
+
+``_numAllocated``用于记录分配空间的个数，表示存储个数的上限。``_numFilled``用于存储当前实际占用的存储空间的个数。
+
+***7. Q7***
+
+这样可以降低变量被多个方法直接进行修改的可能性；调用已经封装的类操作方法可以增加函数的便捷性与可读性。
+
+***8. Q8***
+
+``PQArray::enqueue()``的时间复杂度为``O(N)``，由于``fillQueue()``在for循环中调用了``PQArray::enqueue()``，所以``fillQueue()``的时间复杂度为``O(N^2)``。``PQArray::dequeue()``的时间复杂度为``O(1)``，由于``emptyQueue``在for循环中调用了``PQArray::dequeue()``，所以``emptyQueue()``的时间复杂度为``O(N)``。运行时间测试截图如下
+
+![assign4-Q8](./assign4/assign4-Q8.png)
+
+### 第三部分 使用优先级队列
+
+***9. Q9***
+
+如果基于 ``PQArray`` 实现，对 ``pqSort`` 的时间复杂度是``O(N^2)``。
+
+
+***10. Q10***
+
+基于``enqueue``和``dequeue``的时间复杂度，如果使用``PQArray``，``topK``的时间复杂度为``O(n*k)``，运行时间截图如下：
+
+![assign4-Q10](./assign4/assign4-Q10.png)
+
+### 第四部分 基于二叉堆的优先级队列
+
+***11. Q11***
+
+二叉堆如下
+
+```
+                                      {"T",1}
+                                         |
+                      +------------------+-------------------+
+                      |                                      |
+                   {"B",3}                                {"G",2}
+                      |                                      |
+            +---------+---------+                   +--------+----------+
+            |                   |                   |                   |
+         {"S",6}             {"A",5}             {"V",9}             {"R",4}
+            |
+   +--------+---------+
+   |                  |
+{"O",8}            {"K",7}
+```
+
+***12. Q12***
+
+经过2次出队操作后上述二叉堆如下
+
+```
+                               {"B",3}
+                                  |
+              +-------------------+-------------------+
+              |                                       |
+           {"A",5}                                 {"R",4}
+              |                                       |
+    +---------+----------+                 +----------+---------+
+    |                    |                 |                    |
+{"S",6}               {"O",8}            {"V",9}             {"K",7}
+
+```
+
+***13. Q13***
+
+上面二叉堆的数组表示如下
+
+[0:{"B",3}, 1:{"A",5}, 2:{"R",4}, 3:{"S",6}, 4:{"O",8}, 5:{"V",9}, 6:{"K",7}]
+
+***14. pqheap测试截图***
+
+![assign4-qpheap](./assign4/assign4-pqheap.png)
+
+***14. Q14***
+
+使用PQHeap在pqclient.cpp上重新运行计时试验，测试截图如下
+
+![assign4-Q14](./assign4/assign4-Q14.png)
