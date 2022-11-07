@@ -1,0 +1,132 @@
+Before submitting this file, make sure that there are no more TODO
+placeholders remaining in the file (and remove this comment too).
+
+Warmup
+-------
+Q1. How do the values of the member variables of `allBalls[0]` change from iteration to iteration? Specifically, what happens to the values of `_id`, `_x`, and `_y`?
+A1. allBalls[0] 成员变量的值如何在迭代中的变化如下，_id、_vx、_vy保持不变、_x在之前数值的基础上变化_vx ， _y 之前数值的基础上变化_vy。
+
+Q2. How do the values of the member variables of the stuck ball change from iteration to iteration? Contrast this to your answer to the previous question.
+A2. 在随机数种子设定为2000的条件下，_id为2的小球卡在窗口的右侧，循环过程中_id保持不变，_vx在1和-1之间来回切换，_vy保持不变、_x在之前数值的基础上变化_vx，_y 之前数值的基础上变化_vy。
+
+Q3. After forcing the stuck ball to position (0, 0), does the ball move normally from there or does it stay stuck?
+A3. 强制把卡住的球放置到 (0, 0) 位置会恢复正常。
+
+Q4. On your system, what is the observed consequence of these memory errors:
+- access an index outside the allocated array bounds?
+- delete same memory twice?
+- access memory after it has been deleted?
+A4.
+- access an index outside the allocated array bounds?
+
+有时能正常运行，有时会报以下错误
+[SimpleTest] starting (PROVIDED_TEST, line  44) Test case that access indexes ... 
+*** STANFORD C++ LIBRARY
+*** The PQueue program has terminated unexpectedly (crashed)
+*** A segmentation fault (SIGSEGV) occurred during program execution
+
+    This error indicates your program attempted to dereference a pointer
+    to an invalid memory address (possibly out of bounds, deallocated, nullptr, ...)
+
+*** To get more information about a program crash,
+*** run your program again under the debugger.
+
+FATAL: exception not rethrown
+
+- delete same memory twice?
+
+[SimpleTest] starting (PROVIDED_TEST, line  60) Test case that deletes same me... 
+*** STANFORD C++ LIBRARY
+*** The PQueue program has terminated unexpectedly (crashed)
+*** A segmentation fault (SIGSEGV) occurred during program execution
+
+    This error indicates your program attempted to dereference a pointer
+    to an invalid memory address (possibly out of bounds, deallocated, nullptr, ...)
+
+*** To get more information about a program crash,
+*** run your program again under the debugger.
+
+FATAL: exception not rethrown
+
+- access memory after it has been deleted
+
+EXPECT_EQUAL测试没有通过，内存释放后taskList[0].label中的变量不再是字符串"sleep"。
+
+
+
+PQArray
+-------
+Q5. There are extensive comments in both the interface (`pqarray.h`) and implementation (`pqarray.cpp`). Explain how and why the comments in the interface differ from those in the implementation. Consider both the content and audience for the documentation.
+A5. 接口中的注释描述了功能及算法复杂度，而实现中的注释加入了更多实现细节的描述。
+
+Q6. The class declares member variables `_numAllocated` and `_numFilled`. What is the difference between these two counts and why are both needed?
+A6. _numAllocated用于记录分配空间的个数，表示存储个数的上限。_numFilled用于存储当前实际占用的存储空间的个数。
+
+Q7. Although code within the body of a member function can directly access the object's member variables, the implementer may instead choose to call public member functions to get information about the object. For example, note how the operations `isEmpty()` and `peek()` intentionally call `size()` instead of using `_numFilled` or how `dequeue()` calls `peek()` to retrieve the frontmost element. Why might be this be considered a better design?
+A7. 降低变量被多个方法直接进行修改的可能性；调用已经封装的类操作方法可以增加函数的便捷性与可读性。
+
+Q8. Give the results from your time trials and explain how they support your prediction for the Big-O runtimes of  `enqueue` and `dequeue`.
+A8. PQArray::enqueue()的时间复杂度为O(N)，由于fillQueue()在for循环中调用了PQArray::enqueue()，所以fillQueue()的时间复杂度为O(N^2)。PQArray::dequeue()的时间复杂度为O(1)，由于emptyQueue在for循环中调用了PQArray::dequeue()，所以emptyQueue()的时间复杂度为O(N)。
+
+PQ Client
+---------
+Q9. Based on the Big O of `enqueue`/`dequeue`, what do you expect for the Big O of `pqSort` if using a `PQArray`? Run some timing trials to confirm your prediction, and include that data in your answer.
+A9. 如果基于 PQArray 实现，对 pqSort 的时间复杂度是O(N^2)。
+
+Q10. Based on the Big O of `enqueue`/`dequeue`, what do you expect for the Big O of `topK` in terms of `k` and `n` if using a `PQArray`? Run some timing trials to confirm your prediction, and include that data in your answer.
+A10. 基于enqueue和dequeue的时间复杂度，如果使用PQArray，topK的时间复杂度为O(n*k)。
+
+PQHeap
+------
+Q11. Start with an empty binary heap and enqueue the nine `DataPoint`s in the order shown below and show the result. You only need to show the final heap, not intermediate steps. Draw the heap as tree-like diagram with root element on top, its two children below, and so on. Yes, we know that we're asking you to draw pictures in a text file (we love the [AsciiFlow](http://asciiflow.com/) tool for "drawing" in text).
+A11. 
+                                      {"T",1}
+                                         |
+                      +------------------+-------------------+
+                      |                                      |
+                   {"B",3}                                {"G",2}
+                      |                                      |
+            +---------+---------+                   +--------+----------+
+            |                   |                   |                   |
+         {"S",6}             {"A",5}             {"V",9}             {"R",4}
+            |
+   +--------+---------+
+   |                  |
+{"O",8}            {"K",7}
+
+Q12. Make two calls to `dequeue` on the above binary heap and draw the updated result.
+A12.
+                               {"B",3}
+                                  |
+              +-------------------+-------------------+
+              |                                       |
+           {"A",5}                                 {"R",4}
+              |                                       |
+    +---------+----------+                 +----------+---------+
+    |                    |                 |                    |
+{"S",6}               {"O",8}            {"V",9}             {"K",7}
+
+Q13. Draw the array representation of the binary heap above. Label each element with its array index.
+A13. [0:{"B",3}, 1:{"A",5}, 2:{"R",4}, 3:{"S",6}, 4:{"O",8}, 5:{"V",9}, 6:{"K",7}]
+
+Q14. Re-run the timing trials on `pqclient.cpp` and provide your results that confirm that `pqSort` runs in time O(NlogN) and `topK` in O(NlogK).
+A14. TODO
+
+Embedded Ethics
+---------------
+Q15. Consider the differences between this three-bin priority queue and the priority queue you implemented on your assignment. Which would be more efficient to insert elements into and why? More generally, what are the benefits and disadvantages of using the three-bin priority queue vs. a regular priority queue?
+A15. TODO
+
+Q16. Describe a real-world system where a three-bin priority queue could be used. What factors would you use to distinguish between a low vs. medium vs. high priority element? What limitations might you need to consider when using a three-bin priority queue to represent this system?
+A16. TODO
+
+Q17. Different admissions departments consider different factors and convert admissions criteria to numbers in different ways. Regardless of what specific factors are considered, should an admissions department use a purely numerical ranking system for applicants? Why or why not?
+
+If yes, discuss what factors you think would be best to include when calculating numerical rankings and why those factors are well-represented as numbers. If not, discuss what factors you think should be considered in college admissions that would be difficult to represent as a numerical score. There are no right or wrong answers here – we're genuinely interested in your thoughts!
+A17. TODO
+
+Q18. Describe a real-world system that requires ranking but in which classification with a single number misses important context (i.e. a priority queue might not be the best way to store the objects being ranked). Make sure to use an example that hasn't already been discussed in lecture or in this assignment.
+A18. TODO
+
+Q19. Consider the PQueue class you just implemented. What would you change about the public interface to allow the hospital to dynamically update priorities in order to determine which patient is the best match for an organ? For any methods that you add, briefly describe when they would be used by the client and how they might be implemented privately. Note: Your design does not have to be the fastest or most efficient.
+A19. TODO
