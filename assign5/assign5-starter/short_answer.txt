@@ -1,0 +1,66 @@
+Before submitting this file, make sure that there are no more TODO
+placeholders remaining in the file (and remove this comment too).
+
+Memory Debugging Warmup
+-----------------------
+Q1. What does the yellow background for a test case indicate in the SimpleTest result window?
+A1. 
+测试用例的黄色背景在 SimpleTest 结果窗口中表示程序能够通过测试，但存在内存泄漏。
+
+Q2. What is the observed consequence of a test that uses `delete` on a memory address that has already been deallocated?
+A2. 
+对已释放的内存地址使用 delete 的测试结果是报出一下错误：
+*** STANFORD C++ LIBRARY
+*** The Lists program has terminated unexpectedly (crashed)
+*** An abort error (SIGABRT) was raised during program execution
+
+    This error is raised by system functions that detect corrupt state
+
+*** To get more information about a program crash,
+*** run your program again under the debugger.
+
+FATAL: exception not rethrown
+
+Q3. On your system, what is the observed consequence of `badDeallocate`? Under what circumstances (if any) did the buggy code trigger an error or crash?
+A3. 
+在我的系统上，观察到 badDeallocate 的后果是：
+free(): double free detected in tcache 2
+
+Q4. How is a segmentation fault presented on your system?
+A4. 
+我的系统上呈现的段错误如下：
+*** STANFORD C++ LIBRARY
+*** The Lists program has terminated unexpectedly (crashed)
+*** A segmentation fault (SIGSEGV) occurred during program execution
+
+    This error indicates your program attempted to dereference a pointer
+    to an invalid memory address (possibly out of bounds, deallocated, nullptr, ...)
+
+*** To get more information about a program crash,
+*** run your program again under the debugger.
+
+FATAL: exception not rethrown
+
+Labyrinth
+---------
+Q5. What is a different legal path through the example labyrinth that gathers all three needed items?
+A5.
+其他收集所需物品的路径如下：
+WNNEWSSEESNWSWWN
+
+Sorting Linked Lists
+---------------------
+Q6. If the `deallocateList` utility function were implemented recursively, give a rough estimate of the maximum length list it could successfully handle. What would be the observed result from attempting to deallocate a list longer than this maximum?
+A6.
+如果 deallocateList 函数是递归实现的，根据作业 3 中的热身练习可以粗略估计它可以成功处理的最大长度列表为261888。对于比最大值更长的列表，如果尝试收回内存，观察到的结果是当栈帧数超过系统上限时，程序会崩溃并停止。
+
+Q7. The prototype for the sort function takes a `ListNode*` by reference. Explain why the pointer itself needs to be passed by reference and what the consequence would be if it were not.
+A7.
+指针本身需要通过引用传递，是由于quickSort函数需要对指针中存储的地址进行修改，如果不这样做，函数的调用时，指针通过值传递方式传参，但是函数的执行过程仅仅对本地的副本生效，另外在释放指针指向的堆空间不能够得到释放，造成内存泄漏。
+
+Q8. Run time trials and provide your results that confirm that QuickSort is O(NlogN) . Verify the runtime degrades to O(N^2) on inputs constructed to trigger the worst case behavior.
+A8. 
+触发最坏情况的输入是链表中元素完全按照逆续排列。
+
+Q9. Run the provided timing trials that compare your linked list QuickSort to a Vector sort on the same sequence and report the results. Who wins and why?
+A9. TODO

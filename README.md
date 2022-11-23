@@ -13,6 +13,7 @@
 * 5. [assign3.1](#assign3.1)
 * 6. [assign3.2](#assign3.2)
 * 7. [assign4](#assign4)
+* 8. [assign5](#assign5)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -473,3 +474,87 @@ FATAL: exception not rethrown
 使用``PQHeap``在``pqclient.cpp``上重新运行计时试验，测试截图如下
 
 ![assign4-Q14](./assign4/assign4-Q14.png)
+
+##  8. <a name='assign5'></a>assign5
+
+### 第一部分 热身
+
+***1. Q1***
+
+测试用例的黄色背景在 ``SimpleTest`` 结果窗口中表示程序能够通过测试，但存在内存泄漏。
+
+***2. Q2***
+
+对已释放的内存地址使用 ``delete`` 的测试结果是报出以下错误：
+```
+*** STANFORD C++ LIBRARY
+*** The Lists program has terminated unexpectedly (crashed)
+*** An abort error (SIGABRT) was raised during program execution
+
+    This error is raised by system functions that detect corrupt state
+
+*** To get more information about a program crash,
+*** run your program again under the debugger.
+FATAL: exception not rethrown
+```
+
+***3. Q3***
+
+在我的系统上，观察到 ``badDeallocate`` 的后果是：
+```
+free(): double free detected in tcache 2
+```
+
+***4. Q4***
+
+我的系统上呈现的段错误如下：
+```
+*** STANFORD C++ LIBRARY
+*** The Lists program has terminated unexpectedly (crashed)
+*** A segmentation fault (SIGSEGV) occurred during program execution
+
+    This error indicates your program attempted to dereference a pointer
+    to an invalid memory address (possibly out of bounds, deallocated, nullptr, ...)
+
+*** To get more information about a program crash,
+*** run your program again under the debugger.
+
+FATAL: exception not rethrown
+```
+
+### 第二部分 迷宫
+
+***5. Q5***
+
+其他收集所需物品的路径如下：
+```
+WNNEWSSEESNWSWWN
+```
+
+***6. labyrinth测试截图***
+
+![assign5-labyrinth](./assign5/assign5-labyrinth.png)
+
+### 第三部分 链表排序
+
+***7. Q6***
+
+如果 ``deallocateList`` 函数是递归实现的，根据作业 3 中的热身练习可以粗略估计它可以成功处理的最大长度列表为261888。对于比最大值更长的列表，如果尝试收回内存，观察到的结果是当栈帧数超过系统上限时，程序会崩溃并停止。
+
+***8. Q7***
+
+指针本身需要通过引用传递，是由于``quickSort``函数需要对指针中存储的地址进行修改，如果不这样做，函数的调用时，指针通过值传递方式传参，但是函数的执行过程仅仅对本地的副本生效，另外指针指向的堆空间不能够得到释放，造成内存泄漏。
+
+***9. Q8***
+
+元素是随机情况下``quickSort``的运行时间结果如下，可以看到数据量翻倍，运行时间也近似是翻倍，所以程序复杂度近似是``O(NlogN)``。
+
+![assign5-Q8-1](./assign5/assign5-Q8-1.png)
+
+最坏情况的输入是链表中元素完全按照逆续排列， 最坏情况下``quickSort``的运行时间结果如下，可以看到数据量翻倍，运行时间近似是翻4倍，所以程序复杂度近似是``O(N^2)``。
+
+![assign5-Q8-2](./assign5/assign5-Q8-2.png)
+
+***10. sorting测试截图***
+
+![assign5-sorting](./assign5/assign5-sorting.png)
