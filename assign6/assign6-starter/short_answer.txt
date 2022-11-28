@@ -1,0 +1,82 @@
+Before submitting this file, make sure that there are no more TODO
+placeholders remaining in the file (and remove this comment too).
+
+Q1. Use the above encoding tree to decode the bit sequence `0101100011`.
+A1. 
+序列 0101100011 进行解码后是：MOONS。
+
+Q2. Prepare a table for the above encoding tree that lists each character with its assigned bit sequence.
+Use your table to encode the string `"SONS"`.
+A2. 
+编码树制表格如下：
+|字符 |序列 |
+|----|----|
+|O|1|
+|N|00|
+|M|010|
+|S|011|
+
+使用表格得到字符串“SONS”的编码为：011100011。
+
+Q3. Huffman codes obey the _prefix_ property: no character's encoded bit sequence is a prefix of any other.
+What feature of an encoding tree demonstrates that it obeys the prefix property?
+A3. 
+编码树中所有字符处于不同的叶子节点，该特征使得特编码树服从前缀属性。因为若某个字符节点存在子节点，那么子节点字符对应的搜索路径必定经过父节点，这样对导致子节点字符的编码位序列包含父节点字符的编码位序列。
+
+Q4. Flatten the encoding tree above on the right into its sequence of bits and sequence of characters.
+A4. 
+右上方的编码树展平后的位序列和字符序列为：
+1101000
+NMSO
+
+Q5. Unflatten the sequences `110100100` and `FLERA` to reconstruct the original encoding tree.
+A5. 
+重建后的编码树为：
+     *
+   /   \
+  *     *
+ / \   / \
+F   * R   A
+   / \
+  L   E
+
+Q6. Construct a Huffman coding tree for the input `"BOOKKEEPER"`.
+A6. 
+各个字符出现的频率如下：
+B:1
+P:1
+R:1
+O:2
+K:2
+E:3
+
+构造的哈夫曼编码树如下：
+
+       *
+       10
+      /  \
+     /    \
+    /      \
+   *        *
+   6        4
+  / \      / \
+ /   \    /   \
+E     *  O     K
+3     3  2     2
+     / \
+    /   \
+   *     R
+   2     1
+  / \
+ /   \
+B     P
+1     1
+
+Q7. A node in a Huffman coding tree has two non-null children or no children.
+Why does it not make sense for a node in a Huffman tree to have just one non-null child?
+A7.
+哈夫曼树中若某个节点只有一个非空子节点，会造成编码冗余，可以使用该非空节点替换其父节点，缩短该字符的编码长度。
+
+Q8. Describe the difference in shape of a Huffman coding tree that will lead to significant
+savings for compression versus one that will achieve little to no compression.
+A8. TODO
